@@ -15,6 +15,9 @@ const noteSchema = new mongoonse.Schema(
 );  
 
 // creating a model based off schema
+// this generates an object that inherits from Mongoose base Model class with methods
 const Note = mongoonse.model("Note", noteSchema);
 
+// this file's main export is this one thing, which is why default
+// we do not need other named exports
 export default Note;

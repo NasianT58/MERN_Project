@@ -15,6 +15,9 @@ const PORT = process.env.PORT || 5001
 // function to connect to data base
 connectDB();
 
+// middleware to parse JSON request bodies
+app.use(express.json())
+
 // prefix them with "/api/notes" for methods in notesRoutes.js
 app.use("/api/notes", noteRoutes)
 
