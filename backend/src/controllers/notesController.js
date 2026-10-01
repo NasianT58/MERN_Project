@@ -11,6 +11,9 @@ export async function getNotes(_, res) { // async, allowed to use await
     }
 }
 
+// the req and res parameter created by Express for every incoming request
+// - node receives raw request from whatever client and wraps in a req object organized in convenient fields
+// - also creates a res object, which is tool for sending responses back to that client
 export async function getNotesByID(req, res) {
     try {
         const note = await Note.findById(req.params.id);
