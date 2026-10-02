@@ -1,7 +1,9 @@
 import express from "express"
+import cors from "cors"
+import dotenv from "dotenv"
+
 import noteRoutes from "./routes/notesRoutes.js"
 import { connectDB } from "./config/db.js"
-import dotenv from "dotenv"
 import rateLimiter from "./middleware/rateLimiter.js"
 
 // configuring dotenv to use .env file
@@ -13,11 +15,13 @@ const app = express()
 // using .env variable for PORT, if not available, default to 5001
 const PORT = process.env.PORT || 5001
 
-// middleware to parse JSON request bodies
-// without it, req.body is undefined since information arrives as raw text streaming in over the connection
-app.use(express.json());
+// middleware
+app.use(cors({
+    origin: "http://localhost:5173", // allow requests from our frontend development server
+}));
 
-// custom middle ware
+app.use(express.json()); // to parse JSON request bodies; without it, req.body is undefined since information arrives as raw text streaming in over the connection
+
 app.use(rateLimiter);
 
 app.use((req, res, next) => {
@@ -25,8 +29,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// prefix them with "/api/notes" for methods in notesRoutes.js
-app.use("/api/notes", noteRoutes)
+app.use("/api/notes", noteRoutes) // prefix them with "/api/notes" for methods in notesRoutes.js
 
 
 // wrapping the connectDB call in a promise to ensure the server starts only after the database connection is established
