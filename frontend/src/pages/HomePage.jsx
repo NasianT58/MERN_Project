@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import toast from 'react-hot-toast'
 
 import NavBar from '../components/NavBar'
 import RateLimitedUI from '../components/RateLimitedUI'
 import NoteCard from '../components/NoteCard'
+
+import api from "../lib/axios.js"
 
 const HomePage = () => {
   const [isRateLimited, setIsRateLimited] = useState(false);
@@ -15,7 +16,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const res = await axios.get('http://localhost:5001/api/notes'); {/* fetch notes from the backend */}
+        const res = await api.get("/notes"); {/* fetch notes from the backend */}
         console.log(res.data);
         setNotes(res.data);
         setIsRateLimited(false);
