@@ -9,7 +9,7 @@ import api from "../lib/axios.js"
 
 const HomePage = () => {
   const [isRateLimited, setIsRateLimited] = useState(false);
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState([]); // notes stored in this state
   const [loading, setLoading] = useState(false);
 
   {/* Fetch notes from the backend API when the component mounts */}
@@ -47,8 +47,9 @@ const HomePage = () => {
         {/* Display notes only if there are notes and the user is not rate limited */}
         {notes.length > 0 && !isRateLimited && (
           <div className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Map through the notes array and render a NoteCard for each note */}
             {notes.map((note) => (
-                <NoteCard key={note._id} note={note} />
+                <NoteCard key={note._id} note={note} setNotes={setNotes}/> 
             ))}
           </div>
         )}
