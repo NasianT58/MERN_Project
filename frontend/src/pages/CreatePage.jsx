@@ -1,16 +1,43 @@
 import { ArrowLeftIcon } from 'lucide-react';
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate} from 'react-router'
+import toast from 'react-hot-toast'
+import axios from 'axios'
 
 const CreatePage = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
+  const navigate = useNavigate();
 
+  const handleSubmit = async (e) => {
+    e.preventDefault(); {/* prevent page from refreshing every submission */}
+    
+    if(!title.trim() || !content.trim()) { {/* check if title or content is empty */}
+      toast.error("Please fill in both the title and content fields.");
+      return;
+    }
+
+    setLoading(true);
+
+    try{
+      await axios.post("http://localhost:5001/api/notes", { title, content }); {/* send the title and content to the backend */}
+      toast.success("Note created successfully!");
+      navigate("/");
+    } catch (error) {
+      console.error("Error creating note:", error);
+      if (error.response.status === 429) { /* check if the error is due to rate limiting */
+        toast.error("Slow down! You're creating notes too quickly.", { duration: 4000 }); {/* show a toast notification for rate limiting */}
+      } else {
+        toast.error("Failed to create note")
+      }
+    } finally {
+      setLoading(false);
+    }
   }
+
   return (
     <div className="min-h-screen bg-base-200">
       <div className="container mx-auto px-4 py-8">
