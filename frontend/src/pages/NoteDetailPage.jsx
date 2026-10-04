@@ -54,9 +54,26 @@ const NoteDetailPage = () => {
               <button onClick={handleDelete} className="btn btn-error btn-outline">
                 <Trash2Icon className="h-5 w-5" />
                 Delete Note
-            </button>
-          </div>
-        </div>
+              </button>
+           </div>
+
+         </div>
+         <div className="card bg-base-100">
+          <div className="card-body">
+             <div className="form-control mb-4">
+                <label className="label">
+                  <span className="label-text">Title</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Note title"
+                  className="input input-bordered"
+                  value={note.title}
+                  onChange={(e) => setNote({ ...note, title: e.target.value })}
+                />
+              </div>
+            </div>
+         </div>
       </div>
     </div>
   )
