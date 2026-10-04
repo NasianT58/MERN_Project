@@ -30,8 +30,33 @@ const NoteDetailPage = () => {
     fetchNote();
   }, [id])
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this note?")) {
+      return;
+    }
+    try {
+      await api.delete(`/notes/${id}`)
+      toast.success("Note Deleted!");
+       navigate("/")
+    } catch (error) {
+      console.log("Error deleting note", error);
+      toast.error("Error deleting note");
+    }
+  }
 
+  const handleSave = async () => {
+    if(!note.title.trim() || !note.content.trim()) {
+      toast.error('Please add a title or add content');
+    }
+    setSaving(true);
+    try {
+      await api.put(`/notes/${id}`, note);
+      toast.success("Note updated successfully!");
+      navigate("/");
+    } catch (error) {
+      console.log("Error saving note", error);
+      toast.error("Error saving note");
+    }
   }
 
   if (loading) {
@@ -84,6 +109,12 @@ const NoteDetailPage = () => {
                   value={note.content}
                   onChange={(e) => setNote({ ...note, content: e.target.value })}
                 />
+            </div>
+
+            <div className="card-action justify-end">
+              <button className="btn btn-primary" disabled={saving} onClick={handleSave}>
+                {saving ? "Saving..." : "Saved Changes"}
+              </button>
             </div>
           </div>
         </div>
